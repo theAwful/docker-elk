@@ -14,7 +14,7 @@ services:
         - ./setup/:/setup/
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-	elasticsearch:
+  elasticsearch:
     image: elastdocker/elasticsearch:${ELK_VERSION}
     build:
       context: elasticsearch/

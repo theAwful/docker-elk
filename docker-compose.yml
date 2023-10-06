@@ -14,51 +14,7 @@ services:
         - ./setup/:/setup/
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-
-  certs:
-    image: elastdocker/elasticsearch:${ELK_VERSION}
-    build:
-      context: elasticsearch/
-      args:
-        ELK_VERSION: ${ELK_VERSION}
-    command: bash /setup/setup-certs.sh
-    user: "0"
-    volumes:
-      - ./secrets:/secrets
-      - ./setup/:/setup
-
-# To Join any other app setup using another network, change name and set external = true
-networks:
-  default:
-    name: elastic
-    external: false
-
-# will contain all elasticsearch data.
-volumes:
-  elasticsearch-data:
-
-secrets:
-  elasticsearch.keystore:
-    file: ./secrets/keystore/elasticsearch.keystore
-  elasticsearch.service_tokens:
-    file: ./secrets/service_tokens
-  elastic.ca:
-    file: ./secrets/certs/ca/ca.crt
-  elasticsearch.certificate:
-    file: ./secrets/certs/elasticsearch/elasticsearch.crt
-  elasticsearch.key:
-    file: ./secrets/certs/elasticsearch/elasticsearch.key
-  kibana.certificate:
-    file: ./secrets/certs/kibana/kibana.crt
-  kibana.key:
-    file: ./secrets/certs/kibana/kibana.key
-  apm-server.certificate:
-    file: ./secrets/certs/apm-server/apm-server.crt
-  apm-server.key:
-    file: ./secrets/certs/apm-server/apm-server.key
-
-services:
-  elasticsearch:
+	elasticsearch:
     image: elastdocker/elasticsearch:${ELK_VERSION}
     build:
       context: elasticsearch/
@@ -177,3 +133,49 @@ services:
         target: /certs/apm-server.crt
       - source: apm-server.key
         target: /certs/apm-server.key
+
+
+  certs:
+    image: elastdocker/elasticsearch:${ELK_VERSION}
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: ${ELK_VERSION}
+    command: bash /setup/setup-certs.sh
+    user: "0"
+    volumes:
+      - ./secrets:/secrets
+      - ./setup/:/setup
+
+# To Join any other app setup using another network, change name and set external = true
+networks:
+  default:
+    name: elastic
+    external: false
+
+# will contain all elasticsearch data.
+volumes:
+  elasticsearch-data:
+
+secrets:
+  elasticsearch.keystore:
+    file: ./secrets/keystore/elasticsearch.keystore
+  elasticsearch.service_tokens:
+    file: ./secrets/service_tokens
+  elastic.ca:
+    file: ./secrets/certs/ca/ca.crt
+  elasticsearch.certificate:
+    file: ./secrets/certs/elasticsearch/elasticsearch.crt
+  elasticsearch.key:
+    file: ./secrets/certs/elasticsearch/elasticsearch.key
+  kibana.certificate:
+    file: ./secrets/certs/kibana/kibana.crt
+  kibana.key:
+    file: ./secrets/certs/kibana/kibana.key
+  apm-server.certificate:
+    file: ./secrets/certs/apm-server/apm-server.crt
+  apm-server.key:
+    file: ./secrets/certs/apm-server/apm-server.key
+
+services:
+  
